@@ -60,4 +60,4 @@ def foo(bar1, bar2):
     # Do an einsum, blip shape (B, 2, 5)
     blip = np.einsum('bdi, bjd -> bij', bar1, bar2)
 ```
-Which (in my opinion) is more readable. The `check_shape` will raise a `ShapeError` whenever the arrays don't match the shapes given. Now you have a line of code which is both a shape-checking assertion, which also serves as an inline comment, which won't go stale!
+Which (in my opinion) is more readable. The `check_shape` will raise a `ShapeError` whenever the arrays don't match the shapes given. Now you have a line of code which is both a shape-checking assertion, and also an inline comment -- which won't go stale!
