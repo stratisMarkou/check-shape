@@ -6,7 +6,7 @@ TL;DR: This tool helps prevent bugs by checking shapes in-line, and making code 
 
 A surprising amount of time in machine learning is spent on squashing shape-related bugs. There's two kinds of bugs:
 * **Runtime shape errors**: These are annoying and can take up quite a bit of debugging time, but are not nearly as dangerous as broadcasting bugs.
-* **Unindended broadcasting bugs**: These can be silent unexpected behaviours, which happen due to the broadcasting behaviour of the library in use.
+* **Broadcasting bugs**: These can be silent unintended behaviours, which happen due to the broadcasting of the library in use.
 
 I've found that one thing which goes a long way to prevent/solve this issues is putting shapes in the docstrings or with in-line comments, such as
 ```
@@ -22,7 +22,7 @@ def foo(bar1, bar2):
     # Do an einsum, blip shape (B, 2, 5)
     blip = np.einsum('bdi, bjd -> bij', bar1, bar2)
 ```
-Putting these shapes in is useful because it reduces the mental workload of remembering them, and improves readability. But **commented shapes are never enforced and could become stale**. When you read these docstrings/comments, you might **assume they are enforced**, when in fact they are not, causing unexpected broadcasting and weird errors. One way to enforce this is to use assertions, such as
+Putting these shapes in is useful because it reduces the mental workload of remembering them, and improves readability. But **commented shapes are never enforced and could become stale**. When you read these docstrings/comments, you might **assume they are enforced**, causing unexpected broadcasting. One way to enforce this is to use assertions, such as
 ```
 def foo(bar1, bar2):
     """
@@ -60,4 +60,8 @@ def foo(bar1, bar2):
     # Do an einsum, blip shape (B, 2, 5)
     blip = np.einsum('bdi, bjd -> bij', bar1, bar2)
 ```
-Which (in my opinion) is more readable. The `check_shape` will raise a `ShapeError` whenever the arrays don't match the shapes given. Now you have a line of code which is both a shape-checking assertion, and also an inline comment -- which won't go stale!
+Which (in my opinion) is more readable. The `check_shape` will raise a `ShapeError` whenever the arrays don't match the shapes provided. Now you have a line of code which is both a shape-checking assertion and an inline comment, which is less likely to go stale!
+
+## Future features
+* Adding ellipses `...` to abrreviate checking intermediate arrays.
+* Adding boolean expressions e.g. `D>=3`.
